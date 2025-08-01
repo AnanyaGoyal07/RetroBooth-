@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetroBooth</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="top-left">
+      <div class="speech-bubble">RetroBooth</div>
+    </div>
+
+    <div class="top-center">
+      <video id="camera" autoplay></video>
+      <video id="video" autoplay></video>
+<br />
+<button id="take-photo" class="btn">Take Photo</button>
+
+    </div>
+
+    <div class="middle-left">
+      <p>Select a layout</p>
+      <div class="layout-buttons">
+        <button class="btn" onclick="selectLayout('1x3')">1 x 3</button>
+<button class="btn" onclick="selectLayout('2x2')">2 x 2</button>
+<button class="btn" onclick="selectLayout('2x3')">2 x 3</button>
+
+      </div>
+    </div>
+
+    <div class="middle-right">
+      <p>Selected Photos</p>
+      <div id="photoGrid" class="photo-grid">
+        <!-- Images will appear here -->
+      </div>
+      <button id="downloadBtn">Download</button>
+    </div>
+  </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
