@@ -1,5 +1,5 @@
 const layoutOptions = {
-    '1x3': { shots: 4, select: 3, grid: [1, 3] },
+    '1x3': { shots: 4, select: 3, grid: [3, 1] },
     '2x2': { shots: 5, select: 4, grid: [2, 2] },
     '2x3': { shots: 7, select: 6, grid: [2, 3] }
 };
@@ -14,13 +14,13 @@ let selected = [];
 const layoutSelect = document.getElementById('layoutSelect');
 const startBtn = document.getElementById('startBtn');
 const video = document.getElementById('video');
-const camera = document.getElementById('camera');
 const snapBtn = document.getElementById('snapBtn');
 const thumbnailsDiv = document.getElementById('thumbnails');
 const composeBtn = document.getElementById('composeBtn');
 const resultCanvas = document.getElementById('resultCanvas');
 const downloadBtn = document.getElementById('downloadBtn');
 
+// Reset everything
 function resetPhotobooth() {
     thumbnails = [];
     selected = [];
@@ -30,6 +30,7 @@ function resetPhotobooth() {
     composeBtn.style.display = 'none';
 }
 
+// Update layout when select changes
 layoutSelect.addEventListener('change', function () {
     currentLayout = layoutSelect.value;
     shotsRequired = layoutOptions[currentLayout].shots;
@@ -37,6 +38,8 @@ layoutSelect.addEventListener('change', function () {
     gridConfig = layoutOptions[currentLayout].grid;
     resetPhotobooth();
 });
+
+let photoCount = 0;
 
 startBtn.addEventListener('click', function () {
     resetPhotobooth();
@@ -49,9 +52,7 @@ startBtn.addEventListener('click', function () {
     photoCount = 0;
 });
 
-let photoCount = 0;
 snapBtn.addEventListener('click', function () {
-    photoCount = 0;
     if (photoCount >= shotsRequired) return;
 
     const canvas = document.createElement('canvas');
@@ -66,11 +67,21 @@ snapBtn.addEventListener('click', function () {
     photoCount++;
     if (photoCount === shotsRequired) {
         snapBtn.disabled = true;
-        composeBtn.style.display = 'inline-block';
+
+        // Automatically select the first selectCount photos
+        selected = Array.from({length: selectCount}, (_, k) => k);
+
+        // Stop the camera stream for cleanup
         if (video.srcObject) {
             video.srcObject.getTracks().forEach(track => track.stop());
+            video.srcObject = null;
         }
-        camera.style.display = 'none';
+
+        // Hide composeBtn (optional, since we are auto-composing)
+        composeBtn.style.display = 'none';
+
+        // Directly compose and show the strip/grid in the right panel
+        composePreview();
     }
 });
 
@@ -92,15 +103,35 @@ function renderThumbnails() {
     });
 }
 
-composeBtn.addEventListener('click', function () {
+// Compose and preview function, used both for manual and automatic composition
+function composePreview() {
     if (selected.length !== selectCount) {
         alert(`Please select ${selectCount} photos.`);
         return;
     }
     const [cols, rows] = gridConfig;
-    const w = 160, h = 240;
+
+    // Panel limits (adjust these if your CSS sets different sizes)
+    const maxPanelWidth = 320;
+    const maxPanelHeight = 480;
+    const aspectRatio = 4 / 3; // width : height
+
+    // Compute max photo size that fits the grid
+    const maxImageWidth = maxPanelWidth / cols;
+    const maxImageHeight = maxPanelHeight / rows;
+
+    let w, h;
+    if (maxImageWidth / maxImageHeight > aspectRatio) {
+        h = Math.floor(maxImageHeight);
+        w = Math.floor(h * aspectRatio);
+    } else {
+        w = Math.floor(maxImageWidth);
+        h = Math.floor(w / aspectRatio);
+    }
+
     resultCanvas.width = w * cols;
     resultCanvas.height = h * rows;
+
     const ctx = resultCanvas.getContext('2d');
     ctx.fillStyle = '#dbc994';
     ctx.fillRect(0, 0, resultCanvas.width, resultCanvas.height);
@@ -124,4 +155,7 @@ composeBtn.addEventListener('click', function () {
             }
         };
     });
-});
+}
+
+// Manual Compose (if you still want users to pick selection manually and click Compose)
+composeBtn.addEventListener('click', composePreview);
