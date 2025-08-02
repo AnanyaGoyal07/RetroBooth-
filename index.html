@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RetroBooth</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <title>Retro Photobooth</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="top-left">
-      <div class="speech-bubble">RetroBooth</div>
+  <div id="mainLayout">
+
+    <!-- Left sidebar -->
+    <div id="sidebar">
+      <h2>RetroBooth</h2>
+      <select id="layoutSelect">
+        <option value="1x3">1x3 Strip</option>
+        <option value="2x2">2x2 Grid</option>
+        <option value="2x3">2x3 Grid</option>
+      </select>
+      <button id="startBtn">Snap Now</button>
+      <div id="camera" style="display:none;">
+  <video id="video" autoplay></video>
+</div>
+<button id="snapBtn" style="display:none;">Snap Photo</button>
+      <div id="stickers">
+        <!-- Sample stickers if any -->
+        <img src="assets/sticker1.png" class="sticker" alt="sticker1" />
+        <img src="assets/sticker2.png" class="sticker" alt="sticker2" />
+      </div>
     </div>
 
-    <div class="top-center">
-      <video id="camera" autoplay></video>
+    <!-- Center camera panel -->
+    <div id="cameraPane">
       <video id="video" autoplay></video>
-<br />
-<button id="take-photo" class="btn">Take Photo</button>
-
+      <button id="snapBtn" style="display:none; margin-top: 12px;">Snap Photo</button>
+      <div id="thumbnails"></div>
+      <button id="composeBtn" style="display:none;">Compose & Preview</button>
     </div>
 
-    <div class="middle-left">
-      <p>Select a layout</p>
-      <div class="layout-buttons">
-        <button class="btn" onclick="selectLayout('1x3')">1 x 3</button>
-<button class="btn" onclick="selectLayout('2x2')">2 x 2</button>
-<button class="btn" onclick="selectLayout('2x3')">2 x 3</button>
-
-      </div>
+    <!-- Right result panel -->
+    <div id="resultPane">
+      <canvas id="resultCanvas" style="display:none; border: 2px solid #fff;"></canvas>
+      <a id="downloadBtn" style="display:none;">Download</a>
     </div>
 
-    <div class="middle-right">
-      <p>Selected Photos</p>
-      <div id="photoGrid" class="photo-grid">
-        <!-- Images will appear here -->
-      </div>
-      <button id="downloadBtn">Download</button>
-    </div>
-  </div>
   </div>
 
   <script src="script.js"></script>
 </body>
+
 </html>
