@@ -123,23 +123,3 @@ composeBtn.addEventListener('click', function () {
         };
     });
 });
-// To show camera and video
-const cameraPane = document.getElementById('cameraPane');
-const video = document.getElementById('video');
-const snapBtn = document.getElementById('snapBtn');
-
-startBtn.addEventListener('click', function () {
-  resetPhotobooth();
-  cameraPane.style.display = 'flex';  // Show center panel
-  snapBtn.style.display = 'inline-block';
-
-  navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => { 
-          video.srcObject = stream; 
-          video.play();
-      })
-      .catch(err => {
-          alert('Camera access denied or not available');
-          console.error(err);
-      });
-});
