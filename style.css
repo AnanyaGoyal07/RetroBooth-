@@ -66,6 +66,8 @@ body {
   border-radius: 12px;
   box-shadow: 0 0 12px #ff669933;
   display: block; /* important to make sure it shows */
+  background: #f5e1ef;    /* fallback if no camera */
+  object-fit: cover;
 }
 
 /* Buttons style in sidebar */

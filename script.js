@@ -40,16 +40,18 @@ layoutSelect.addEventListener('change', function () {
 
 startBtn.addEventListener('click', function () {
     resetPhotobooth();
-    camera.style.display = 'block';
+    document.getElementById('cameraPane').style.display = 'block';
     snapBtn.style.display = 'inline-block';
     navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => { video.srcObject = stream; });
+        .then(stream => { video.srcObject = stream; })
+        .catch(err => { alert('Could not access camera: ' + err); });
     snapBtn.disabled = false;
     photoCount = 0;
 });
 
 let photoCount = 0;
 snapBtn.addEventListener('click', function () {
+    photoCount = 0;
     if (photoCount >= shotsRequired) return;
 
     const canvas = document.createElement('canvas');
