@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Retro Photobooth</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Load GIF.js and QRCode.js libraries BEFORE script.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div id="mainLayout">
@@ -16,34 +20,56 @@
         <option value="2x2">2x2 Grid</option>
         <option value="2x3">2x3 Grid</option>
       </select>
-      <button id="startBtn">Snap Now</button>
-      <div id="camera" style="display:none;">
-</div>
-<button id="snapBtn" style="display:none;">Snap Photo</button>
+
+      <button id="startBtn">Start Photo Session</button>
+      <button id="snapBtn" style="display:none;">Snap Photo</button>
+      <button id="composeBtn" style="display:none;">Compose & Preview</button>
+
       <div id="stickers">
-        <!-- Sample stickers if any -->
+        <!-- Sample stickers -->
         <img src="assets/sticker1.png" class="sticker" alt="sticker1" />
         <img src="assets/sticker2.png" class="sticker" alt="sticker2" />
+      </div>
+
+      <!-- Doodle tool controls -->
+      <div id="doodleControls" style="margin-top:20px;">
+        <label for="colorPicker">Brush Color:</label>
+        <input type="color" id="colorPicker" value="#000000" />
+        <label for="brushSize">Brush Size:</label>
+        <input type="range" id="brushSize" min="1" max="10" value="3" />
+        <button id="clearDoodle">Clear Doodles</button>
+      </div>
+
+      <!-- QR Code section -->
+      <div id="qrSection" style="margin-top:20px; text-align:center; display:none;">
+        <p>Scan to view your photo strip:</p>
+        <div id="qrcode"></div>
       </div>
     </div>
 
     <!-- Center camera panel -->
-    <div id="cameraPane">
-      <video id="video" autoplay></video>
-      <button id="snapBtn" style="display:none; margin-top: 12px;">Snap Photo</button>
+    <div id="cameraPane" style="position:relative;">
+      <video id="video" autoplay muted playsinline></video>
+      <canvas id="doodleCanvas" style="position:absolute; top:0; left:0; pointer-events:none;"></canvas>
+
+      <div id="countdown" style="font-size:48px; color:#e75480; font-family:'Press Start 2P', monospace; text-align:center; margin-top:10px; height:60px;"></div>
+
       <div id="thumbnails"></div>
-      <button id="composeBtn" style="display:none;">Compose & Preview</button>
     </div>
 
     <!-- Right result panel -->
     <div id="resultPane">
       <canvas id="resultCanvas" style="display:none; border: 2px solid #fff;"></canvas>
-      <a id="downloadBtn" style="display:none;">Download</a>
+      <a id="downloadBtn" style="display:none;" href="#" download="photobooth.png">Download Strip/Grid</a>
+      <button id="shareGifBtn" style="display:none; margin-top: 10px;">Download Animated GIF</button>
     </div>
 
   </div>
 
+  <audio id="shutterSound" src="assets/shutter.wav" preload="auto"></audio>
+  <audio id="beepSound" src="assets/beep.wav" preload="auto"></audio>
+  <audio id="doneSound" src="assets/done.wav" preload="auto"></audio>
+
   <script src="script.js"></script>
 </body>
-
 </html>
